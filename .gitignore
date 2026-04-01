@@ -1,0 +1,13 @@
+# SQLite-Datenbankdateien: enthalten nutzerbezogene Laufzeitdaten,
+# die nicht versioniert werden dürfen (DSGVO, Reproduzierbarkeit via schema.sql + seed.php).
+*.sqlite
+
+# Logdateien: maschinenspezifisch, potenziell personenbezogene Daten (IPs, Nutzernamen).
+*.log
+
+# Umgebungskonfiguration: ggf. Secrets oder umgebungsspezifische Pfade.
+.env
+
+# IDE-Metadaten: entwicklerlokal, nicht projektrelevant.
+.idea/
+.vscode/
