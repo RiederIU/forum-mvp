@@ -40,4 +40,63 @@ class User
         ]);
         return (int) $db->lastInsertId();
     }
+
+    // =========================================================================
+    //  Admin-Funktionen (Phase 15)
+    // =========================================================================
+
+    /**
+     * Gibt alle Nutzer ohne password_hash zurück.
+     * Der Hash wird bewusst weggelassen. Er wird nur beim Login für password_verify() gebraucht.
+     */
+    public static function getAll(): array
+    {
+        $db = getDB();
+        $stmt = $db->query(
+            'SELECT id, username, email, role, created_at
+             FROM users
+             ORDER BY created_at ASC'
+        );
+        return $stmt->fetchAll();
+    }
+
+    public static function getById(int $id): ?array
+    {
+        $db = getDB();
+        $stmt = $db->prepare(
+            'SELECT id, username, email, role, created_at
+             FROM users
+             WHERE id = :id'
+        );
+        $stmt->execute([':id' => $id]);
+        $user = $stmt->fetch();
+        return $user ?: null;
+    }
+
+    /**
+     * Ändert die Rolle eines Nutzers mit PHP-seitiger Whitelist-Prüfung.
+     * Die Rollen werden zusätzlich in PHP validiert, obwohl das Datenbankschema bereits einen CHECK-Constraint enthält.
+     * Diese doppelte Absicherung liefert bei ungültiger Eingabe eine verständliche Fehlermeldung statt einer generischen Datenbankausnahme.
+     */
+    public static function updateRole(int $userId, string $newRole): bool
+    {
+        $allowed = ['user', 'moderator', 'admin'];
+        if (!in_array($newRole, $allowed, true)) {
+            return false;
+        }
+
+        $db = getDB();
+        $stmt = $db->prepare(
+            'UPDATE users SET role = :role WHERE id = :id'
+        );
+        $stmt->execute([':role' => $newRole, ':id' => $userId]);
+        return true;
+    }
+
+    public static function delete(int $userId): void
+    {
+        $db = getDB();
+        $stmt = $db->prepare('DELETE FROM users WHERE id = :id');
+        $stmt->execute([':id' => $userId]);
+    }
 }
