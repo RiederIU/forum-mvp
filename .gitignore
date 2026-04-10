@@ -1,6 +1,7 @@
 # SQLite-Datenbankdateien: enthalten nutzerbezogene Laufzeitdaten,
 # die nicht versioniert werden dürfen (DSGVO, Reproduzierbarkeit via schema.sql + seed.php).
 *.sqlite
+*.db
 
 # Logdateien: maschinenspezifisch, potenziell personenbezogene Daten (IPs, Nutzernamen).
 *.log

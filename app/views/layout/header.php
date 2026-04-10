@@ -19,9 +19,9 @@ function hsc(string $str): string
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
 <nav>
     <a href="index.php?action=topics.index" class="nav-brand"><?= hsc(APP_NAME) ?></a>
+    <button class="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">&#9776;</button>
 
     <div class="nav-links">
         <?php if (isLoggedIn()): ?>
@@ -39,6 +39,13 @@ function hsc(string $str): string
         <?php endif; ?>
     </div>
 </nav>
+<script>
+    document.querySelector('.nav-toggle').addEventListener('click', function () {
+        var open = document.querySelector('nav').classList.toggle('nav-open');
+        this.setAttribute('aria-expanded', open);
+        this.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+    });
+</script>
 
 <main>
     <?php $flash = getFlash(); ?>

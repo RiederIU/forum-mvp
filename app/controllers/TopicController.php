@@ -182,6 +182,12 @@ class TopicController
     {
         requireLogin();
 
+        if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
+            setFlash('error', 'Ungültiges Formular-Token.');
+            header('Location: index.php?action=topics.index');
+            exit;
+        }
+
         /**
          * Löschaktionen laufen ausschließlich über POST.
          * GET-Requests sind zustandslos und dürfen keine Daten verändern.
@@ -197,12 +203,6 @@ class TopicController
 
         if ($topic['user_id'] !== currentUser()['id'] && !hasRole('admin')) {
             setFlash('error', 'Keine Berechtigung für diese Aktion.');
-            header('Location: index.php?action=topics.index');
-            exit;
-        }
-
-        if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
-            setFlash('error', 'Ungültiges Formular-Token.');
             header('Location: index.php?action=topics.index');
             exit;
         }

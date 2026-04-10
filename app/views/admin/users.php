@@ -2,6 +2,7 @@
 
 <p><?= count($users) ?> registrierte Nutzer</p>
 
+<div class="table-scroll">
 <table>
     <thead>
         <tr>
@@ -64,5 +65,6 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+</div>
 
 <p><a href="index.php?action=topics.index">&larr; Zurück zur Forumsübersicht</a></p>
