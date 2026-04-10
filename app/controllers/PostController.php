@@ -129,6 +129,12 @@ class PostController
     {
         requireLogin();
 
+        if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
+            setFlash('error', 'Ungültiges Formular-Token.');
+            header('Location: index.php?action=topics.index');
+            exit;
+        }
+
         $id   = (int) ($_POST['id'] ?? 0);
         $post = Post::getById($id);
 
@@ -139,12 +145,6 @@ class PostController
 
         if ($post['user_id'] !== currentUser()['id'] && !hasRole('moderator')) {
             setFlash('error', 'Keine Berechtigung für diese Aktion.');
-            header('Location: index.php?action=topics.show&id=' . $post['topic_id']);
-            exit;
-        }
-
-        if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
-            setFlash('error', 'Ungültiges Formular-Token.');
             header('Location: index.php?action=topics.show&id=' . $post['topic_id']);
             exit;
         }

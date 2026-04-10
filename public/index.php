@@ -2,7 +2,7 @@
 
 /**
  * Zentraler Einstiegspunkt der Anwendung.
- * Itialisiert Session, DB-Verbindung und Helpers.
+ * Initialisiert Session, DB-Verbindung und Helpers.
  * Das anschließende Routing an den zuständigen Controller erfolgt über den Parameter `?action=
  */
 
