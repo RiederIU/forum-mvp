@@ -80,7 +80,7 @@ forum/
 │   ├── init.php                DB-Initialisierung
 │   ├── seed.php                Testdaten-Generator
 │   ├── perftest.php            Performancetest
-│   └── security_audit.php     Automatisiertes Sicherheits-Audit
+│   └── security_audit.php      Automatisiertes Sicherheits-Audit
 ├── helpers/
 │   ├── session.php             Session, Flash-Messages, CSRF
 │   ├── auth.php                Login-Prüfung, Rollenprüfung (RBAC)

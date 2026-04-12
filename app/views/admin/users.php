@@ -23,15 +23,12 @@
 
                 <td>
                     <?php if ($user['id'] === currentUser()['id']): ?>
-                        <!--
-                            Die eigene Rolle wird nur als Text angezeigt.
-                            Ein Dropdown würde den Selbstschutz auf UI-Ebene untergraben.
-                        -->
+                        <!-- Eigene Rolle nur als Text, kein Dropdown (Selbstschutz) -->
                         <strong><?= hsc($user['role']) ?></strong>
                         <em>(eigenes Konto)</em>
                     <?php else: ?>
                         <form method="POST" action="index.php?action=admin.updateRole"
-                              style="display:inline">
+                              class="inline-form">
                             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
                             <select name="role" onchange="this.form.submit()">
@@ -51,11 +48,11 @@
                 <td>
                     <?php if ($user['id'] !== currentUser()['id']): ?>
                         <form method="POST" action="index.php?action=admin.deleteUser"
-                              style="display:inline"
-                              onsubmit="return confirm('Nutzer &bdquo;<?= hsc($user['username']) ?>&ldquo; und ALLE zugehörigen Themen/Beiträge wirklich löschen?')">
+                              class="inline-form delete-form">
                             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                            <button type="submit" class="delete">Löschen</button>
+                            <button type="submit" class="delete"
+                                    data-username="<?= hsc($user['username']) ?>">Löschen</button>
                         </form>
                     <?php else: ?>
                         —
@@ -68,3 +65,14 @@
 </div>
 
 <p><a href="index.php?action=topics.index">&larr; Zurück zur Forumsübersicht</a></p>
+
+<script>
+document.querySelectorAll('.delete-form').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+        var name = e.submitter.dataset.username;
+        if (!confirm('Nutzer „' + name + '" und ALLE zugehörigen Themen/Beiträge wirklich löschen?')) {
+            e.preventDefault();
+        }
+    });
+});
+</script>

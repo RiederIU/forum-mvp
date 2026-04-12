@@ -1,14 +1,10 @@
 <?php
 /**
- * Testdaten-Generator für reproduzierbare Funktions- und Integrationstests.
- *
- * Erzeugt ein deterministisches Datenset mit allen drei Rollen und
- * ausreichend Themen/Beiträgen, um Pagination, Suche und RBAC-
- * Szenarien zu testen. Idempotent: löscht bestehende Daten vor dem
- * Neuanlegen (Reihenfolge beachtet FK-Constraints).
+ * Legt Testnutzer, Themen und Beiträge für alle Rollen an.
+ * Bestehende Daten werden vorher gelöscht, damit das Skript mehrfach ausführbar ist.
  *
  * Ausführung: php database/seed.php
- * Zugangsdaten: Alle Testnutzer verwenden das Passwort 'test1234'.
+ * Alle Testnutzer verwenden das Passwort 'test1234'.
  */
 
 require_once __DIR__ . '/../config/database.php';
@@ -16,7 +12,7 @@ require_once __DIR__ . '/../config/database.php';
 $db = getDB();
 
 // =========================================================================
-//  1. Bestehende Daten entfernen (FK-Reihenfolge: Posts → Topics → Users)
+//  1. Bestehende Daten entfernen (Reihenfolge beachtet Fremdschlüssel)
 // =========================================================================
 
 $db->exec('DELETE FROM posts');
@@ -87,14 +83,10 @@ foreach ($topicTitles as $i => $title) {
 echo "8 Themen erstellt.\n";
 
 // =========================================================================
-//  5. Beiträge generieren (3–10 pro Thema, verschiedene Autoren)
+//  5. Beiträge generieren (5 bis 7 pro Thema, passend zum jeweiligen Thema)
 // =========================================================================
 
-/**
- * Themenspezifische Beiträge: Jedes Thema hat eigene, inhaltlich passende
- * Texte. Die Reihenfolge entspricht der Reihenfolge der $topicTitles oben.
- * So liefert die Volltextsuche sinnvolle, thematisch passende Treffer.
- */
+// Jedes Thema hat passende Beiträge, damit die Volltextsuche sinnvolle Treffer liefert.
 
 $topicPosts = [
     // Willkommen im Forum: Vorstellungsrunde
