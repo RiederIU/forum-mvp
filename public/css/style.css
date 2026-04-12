@@ -83,8 +83,7 @@ footer {
 /* ==========================================================================
    Flash-Messages
 
-   Semantisches Farbsystem (Erfolg, Fehler, Warnung).
-   Die Farben sind auf ausreichende Kontraste für die Barrierefreiheit geprüft.
+   Farbcodierung nach Typ (Erfolg, Fehler, Warnung) mit geprüften Kontrasten.
    ========================================================================== */
 
 .flash {
@@ -267,9 +266,7 @@ select:focus {
 /* ==========================================================================
    Responsive Design
 
-   Unter 768 px: Hamburger-Menü statt dauerhaft sichtbarer Nav-Links.
-   Logo und Toggle-Button bleiben in einer Zeile. Die Nav-Links klappen
-   per JS (Klasse nav-open auf <nav>) unterhalb auf.
+   Unter 768 px wird das Menü zum Hamburger-Menü.
    ========================================================================== */
 
 @media (max-width: 768px) {
@@ -386,13 +383,10 @@ button.delete:hover {
 }
 
 /* ==========================================================================
-   Hilfklassen
+   Hilfsklassen
    ========================================================================== */
 
-/*
- * Versteckt ein Element visuell, lässt es aber für Screenreader sichtbar.
- * Wird für Labels genutzt, die kein sichtbares Gegenstück haben (z. B. Suchfeld).
- */
+/* Visuell versteckt, aber für Screenreader sichtbar. */
 .sr-only {
     position: absolute;
     width: 1px;

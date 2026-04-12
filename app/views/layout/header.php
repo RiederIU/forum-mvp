@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Schützt gegen XSS-Angriffe.
- * Wandelt Sonderzeichen und Anführungszeichen in harmlosen Text um.
- * Im Header definiert, damit alle Views die Funktion nutzen können.
- */
+/** Escaping gegen XSS. Im Header definiert, damit alle Views sie nutzen können. */
 function hsc(string $str): string
 {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
@@ -50,11 +46,7 @@ function hsc(string $str): string
 <main>
     <?php $flash = getFlash(); ?>
     <?php if ($flash !== null): ?>
-        <!--
-            role="alert" lässt Screenreader die Meldung sofort vorlesen.
-            Der Nutzer muss dafür nicht manuell navigieren (ARIA Live Region).
-            Kleiner Aufwand, großer Gewinn für die Barrierefreiheit.
-        -->
+        <!-- role="alert" macht die Meldung für Screenreader sofort hörbar -->
         <div class="flash flash-<?= hsc($flash['type']) ?>" role="alert">
             <?= hsc($flash['message']) ?>
         </div>

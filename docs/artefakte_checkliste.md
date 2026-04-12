@@ -1,4 +1,4 @@
-# Artefakte-Checkliste — Phase 19
+# Artefakte-Checkliste
 
 Alle Artefakte für den Projektbericht DLBITPEWP01-01.
 
