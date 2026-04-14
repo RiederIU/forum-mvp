@@ -1,160 +1,100 @@
 # Webforum MVP
 
-Ein webbasiertes Diskussionsforum als Minimum Viable Product (MVP), entwickelt
-im Rahmen des Moduls **DLBITPEWP01-01 — Einstieg in die Web-Programmierung**
-an der IU Internationalen Hochschule.
-
----
+Webbasiertes Diskussionsforum als Minimum Viable Product (MVP), entwickelt im Rahmen des Moduls
+DLBITPEWP01-01 (Einstieg in die Web-Programmierung) an der IU Internationalen Hochschule.
 
 ## Voraussetzungen
 
-| Komponente            | Version / Hinweis                                          |
-|-----------------------|------------------------------------------------------------|
-| XAMPP                 | >= 8.x (inkl. Apache + PHP)                                |
-| PHP                   | >= 8.0 mit aktivierten Extensions `pdo_sqlite`, `sqlite3`  |
-| Git                   | beliebige Version                                          |
-| Browser               | aktueller Chrome, Firefox, Edge oder Safari                |
-| DB Browser for SQLite | optional, empfohlen zur Dateninspektion                    |
-
----
+- XAMPP >= 8.x (Apache + PHP)
+- PHP >= 8.0 mit `pdo_sqlite` und `sqlite3`
+- Git
+- Aktueller Browser (Chrome, Firefox, Edge oder Safari)
 
 ## Installation
 
+Standard-Setup: XAMPP unter `C:/xampp/`. Bei abweichendem XAMPP-Pfad alle folgenden Pfade entsprechend anpassen.
+
 ```bash
-# 1. Repository klonen
-git clone <REPOSITORY-URL> C:/xampp/htdocs/forum
-
-# 2. In das Projektverzeichnis wechseln
+git clone https://github.com/RiederIU/forum-mvp.git C:/xampp/htdocs/forum
 cd C:/xampp/htdocs/forum
-
-# 3. Datenbank initialisieren (erstellt forum.sqlite + Admin-Account)
-php database/init.php
-
-# 4. Testdaten laden (5 Nutzer, 8 Themen, diverse Beiträge)
-php database/seed.php
-
-# 5. Apache in XAMPP starten und Forum im Browser öffnen
-#    http://localhost/forum/public/
+php database/init.php       # Datenbank und Admin-Account anlegen
+php database/seed.php       # Testdaten laden (5 Nutzende, 8 Themen, 48 Beiträge)
 ```
 
----
+Falls der Befehl `php` nicht gefunden wird (Standard-XAMPP fügt PHP nicht zum PATH hinzu), den vollen Pfad nutzen: `C:/xampp/php/php.exe database/init.php` (analog für `seed.php`).
+
+Anschließend Apache in XAMPP starten und `http://localhost/forum/public/` aufrufen.
 
 ## Test-Zugangsdaten
 
-| Benutzername | E-Mail               | Passwort   | Rolle      |
-|--------------|----------------------|------------|------------|
-| admin        | admin@forum.local    | admin123   | Admin      |
-| moderator    | mod@forum.local      | test1234   | Moderator  |
-| alice        | alice@forum.local    | test1234   | User       |
-| bob          | bob@forum.local      | test1234   | User       |
-| charlie      | charlie@forum.local  | test1234   | User       |
+| Benutzername | E-Mail              | Passwort  | Rolle     |
+|--------------|---------------------|-----------|-----------|
+| admin        | admin@forum.local   | admin123  | Admin     |
+| moderator    | mod@forum.local     | test1234  | Moderator |
+| alice        | alice@forum.local   | test1234  | User      |
+| bob          | bob@forum.local     | test1234  | User      |
+| charlie      | charlie@forum.local | test1234  | User      |
 
-> **Hinweis:** Diese Zugangsdaten gelten ausschließlich für die lokale
-> Entwicklungsumgebung. In einer Produktivumgebung müssen individuelle,
-> sichere Passwörter verwendet werden.
-
----
+Die Zugangsdaten gelten ausschließlich für die lokale Entwicklungsumgebung.
 
 ## Projektstruktur
 
 ```
 forum/
-├── public/                     DocumentRoot (einziger Einstiegspunkt)
-│   ├── index.php               Front-Controller / Router
-│   └── css/style.css           Stylesheet
+├── public/
+│   ├── index.php                Front-Controller
+│   └── css/style.css
 ├── app/
-│   ├── controllers/            AuthController, TopicController,
-│   │                           PostController, AdminController
-│   ├── models/                 User, Topic, Post
-│   └── views/
-│       ├── layout/             header.php, footer.php, pagination.php
-│       ├── auth/               login.php, register.php
-│       ├── topics/             index.php, create.php, show.php, edit.php
-│       ├── posts/              edit.php
-│       └── admin/              users.php
+│   ├── controllers/             Auth, Topic, Post, Admin
+│   ├── models/                  User, Topic, Post
+│   └── views/                   Layout, Auth, Topics, Posts, Admin
 ├── config/
-│   ├── database.php            PDO-Verbindung (Singleton)
-│   └── app.php                 Globale Konstanten
+│   ├── database.php             PHP Data Objects (PDO), Singleton
+│   └── app.php                  Anwendungskonstanten
 ├── database/
-│   ├── schema.sql              CREATE TABLE Statements
-│   ├── init.php                DB-Initialisierung
-│   ├── seed.php                Testdaten-Generator
-│   ├── perftest.php            Performancetest
-│   └── security_audit.php      Automatisiertes Sicherheits-Audit
+│   ├── schema.sql               Tabellendefinitionen
+│   ├── init.php                 DB-Initialisierung
+│   ├── seed.php                 Testdaten
+│   ├── perftest.php             Performancetest
+│   └── security_audit.php       Sicherheitsaudit (39 Prüfungen)
 ├── helpers/
-│   ├── session.php             Session, Flash-Messages, CSRF
-│   ├── auth.php                Login-Prüfung, Rollenprüfung (RBAC)
-│   └── logging.php             Zentrales Logging
+│   ├── session.php              Session, Flash-Messages, CSRF-Schutz
+│   ├── auth.php                 Authentifizierung und Autorisierung
+│   └── logging.php              Audit-Logging
 ├── .gitignore
 └── README.md
 ```
 
----
-
 ## Technologie-Stack
 
-| Schicht       | Technologie        | Begründung                                      |
-|---------------|--------------------|-------------------------------------------------|
-| Backend       | PHP 8.x (vanilla)  | Serverseitig, ohne Framework-Overhead           |
-| Frontend      | HTML5, CSS3, JS    | Semantisches Markup, responsives Layout         |
-| Datenbank     | SQLite             | Dateibasiert, kein Server nötig, ideal für MVP  |
-| Architektur   | MVC                | Trennung von Logik, Daten und Darstellung       |
-| Webserver     | Apache (XAMPP)     | Standard-Entwicklungsumgebung für PHP           |
-| Versionierung | Git                | Nachvollziehbare Entwicklungshistorie           |
-
----
+| Schicht     | Technologie       |
+|-------------|-------------------|
+| Backend     | PHP 8.x (ohne Framework) |
+| Frontend    | HTML5, CSS3, natives JavaScript |
+| Datenbank   | SQLite 3          |
+| Architektur | Model-View-Controller (MVC) |
+| Webserver   | Apache via XAMPP   |
+| Versionierung | Git + GitHub |
 
 ## Funktionsumfang
 
-- **Authentifizierung:** Registrierung, Login, Logout mit bcrypt-Hashing und Session-Fixation-Schutz
-- **Themen:** Erstellen, Anzeigen, Bearbeiten, Löschen (CRUD)
-- **Beiträge:** Antworten, Bearbeiten, Löschen mit Bump-Semantik
-- **Rollenbasierte Zugriffskontrolle:** User, Moderator, Admin mit hierarchischem Berechtigungsmodell
-- **Admin-Panel:** Nutzerverwaltung mit Rollenzuweisung und Löschfunktion inkl. Selbstschutz-Mechanismus
-- **Sicherheit:** CSRF-Token, Prepared Statements, XSS-Schutz (Output-Encoding), HttpOnly-Session-Cookies
-- **Suche:** Volltextsuche über Thementitel und Beitragsinhalte
-- **Pagination:** Wiederverwendbares Partial mit ARIA-Attributen
-- **Logging:** Strukturiertes Logging aller sicherheitsrelevanten Aktionen
-- **Barrierefreiheit:** Fokus-Indikatoren, Kontrastverhältnisse (WCAG AA), semantisches HTML, ARIA-Landmarks
+**Pflichtfunktionen** (Aufgabenstellung, vgl. Projektbericht Kap. 2.2):
 
----
+- Registrierung, Login und Logout mit bcrypt-Hashing
+- Vollständige CRUD-Operationen (Create, Read, Update, Delete) für Themen und Beiträge
 
-## Qualitätssicherung
+**Weitere Teilziele** (vgl. Projektbericht Kap. 1.3):
+
+- Rollenbasierte Zugriffskontrolle (RBAC) mit vier Stufen (Gast, User, Moderator, Admin)
+- Volltextsuche über Thementitel und Beitragsinhalte mit Pagination
+
+**Sicherheitsmaßnahmen** (vgl. Projektbericht Kap. 2.3): Cross-Site Request Forgery-Schutz (CSRF), Prepared Statements, Output-Encoding gegen Cross-Site Scripting (XSS), Session-Regeneration gegen Session-Fixation.
+
+**Erweiterungen** (Admin-Bereich mit Selbstschutz-Mechanismus, Bump-Semantik, Flash-Messages, Barrierefreiheitsmaßnahmen, responsives Mobile-first-Layout, JavaScript-Bestätigungsdialoge, strukturiertes Logging) — Details siehe Projektbericht Kap. 2.2.
+
+## Tests ausführen
 
 ```bash
-# Sicherheits-Audit ausführen
-php database/security_audit.php
-
-# Performancetest ausführen (500 Themen, 2.500 Beiträge)
-php database/perftest.php
+php database/security_audit.php    # 39 automatisierte Sicherheitsprüfungen
+php database/perftest.php          # Performancetest mit 500 Themen und 2.500 Beiträgen
 ```
-
----
-
-## Betriebskonzept
-
-### IST-Zustand (Entwicklungsumgebung)
-
-| Aspekt     | Aktuell                   |
-|------------|---------------------------|
-| Server     | Lokaler Apache via XAMPP  |
-| Datenbank  | SQLite (Einzeldatei)      |
-| HTTPS      | Nein (localhost)          |
-| Backup     | Manuell (Datei kopieren)  |
-| Deployment | Kein (lokaler Betrieb)    |
-| Monitoring | app.log (manuell)         |
-| Nutzerzahl | < 10 (Entwicklung/Test)   |
-
-### Skalierungspfad
-
-| Stufe           | Nutzerzahl | Maßnahmen                                                           |
-|-----------------|------------|---------------------------------------------------------------------|
-| 1 — MVP         | < 10       | Keine, aktueller Stand                                              |
-| 2 — Pilot       | < 50       | VPS mit HTTPS, Let's-Encrypt-Zertifikat, `session.cookie_secure=1`  |
-| 3 — Wachstum    | > 100      | Migration auf MySQL/MariaDB, Reverse-Proxy, Backup-Automatisierung  |
-
----
-
-## Lizenz
-
-Dieses Projekt wurde im Rahmen einer akademischen Prüfungsleistung erstellt.

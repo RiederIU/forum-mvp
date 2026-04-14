@@ -155,9 +155,9 @@ audit(
 );
 
 // =========================================================================
-//  6. Fremdschlüssel-Prüfung
+//  6. Löschkonzept (Foreign Keys mit ON DELETE CASCADE)
 // =========================================================================
-echo "\n=== 6. SQLite Foreign Keys ===\n";
+echo "\n=== 6. Löschkonzept ===\n";
 
 $fkStatus = $db->query('PRAGMA foreign_keys')->fetchColumn();
 audit('PRAGMA foreign_keys = ON', (int) $fkStatus === 1);

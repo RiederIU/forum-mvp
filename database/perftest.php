@@ -92,7 +92,7 @@ $result   = Topic::getAll($lastPage, PER_PAGE, 'Performancetest');
 $end      = microtime(true);
 $ms3      = round(($end - $start) * 1000, 2);
 
-echo "Topic::getAll($lastPage, 10) letzte Seite:  {$ms3} ms\n";
+echo "Topic::getAll($lastPage, 10) hoher OFFSET:   {$ms3} ms\n";
 
 // =========================================================================
 //  5. Bewertung

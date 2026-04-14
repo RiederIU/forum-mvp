@@ -50,11 +50,12 @@ class User
     public static function getAll(): array
     {
         $db = getDB();
-        $stmt = $db->query(
+        $stmt = $db->prepare(
             'SELECT id, username, email, role, created_at
              FROM users
              ORDER BY created_at ASC'
         );
+        $stmt->execute();
         return $stmt->fetchAll();
     }
 
